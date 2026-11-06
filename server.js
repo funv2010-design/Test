@@ -8,7 +8,7 @@ const { WebSocketServer } = require('ws');
 
 const PORT = Number(process.env.PORT) || 3000;
 const HOST = process.env.HOST || '0.0.0.0';
-const PUBLIC_DIR = path.join(__dirname, 'public');
+const STATIC_DIR = path.join(__dirname, 'docs');
 
 const LIMITS = {
   name: 24,
@@ -302,8 +302,8 @@ function serveStatic(req, res) {
   }
 
   if (pathname === '/') pathname = '/index.html';
-  const filePath = path.join(PUBLIC_DIR, pathname);
-  if (!filePath.startsWith(PUBLIC_DIR + path.sep)) {
+  const filePath = path.join(STATIC_DIR, pathname);
+  if (!filePath.startsWith(STATIC_DIR + path.sep)) {
     res.writeHead(403).end('Forbidden');
     return;
   }

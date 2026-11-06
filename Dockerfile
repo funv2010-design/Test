@@ -6,7 +6,7 @@ COPY package*.json ./
 RUN npm ci --omit=dev
 
 COPY server.js ./
-COPY public ./public
+COPY docs ./docs
 
 ENV NODE_ENV=production
 ENV PORT=3000

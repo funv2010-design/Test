@@ -49,9 +49,9 @@ Limits (message length, history depth, rate limiting) are grouped in the
 
 ```
 server.js          HTTP static server + WebSocket hub
-public/index.html  markup
-public/style.css   styles
-public/app.js      client: connection, rendering, composer
+docs/index.html    markup
+docs/style.css     styles
+docs/app.js        client: connection, rendering, composer
 test/smoke.mjs     protocol + edge-case checks, run with `npm test`
 Dockerfile         container image
 ```
@@ -124,8 +124,9 @@ still live on Pages while the server runs elsewhere.
 
 1. Deploy the backend on any of the hosts above and note its URL.
 2. Repo **Settings → Pages → Source: Deploy from a branch**, branch `main`,
-   folder **`/public`**, Save. The site appears at
-   `https://<user>.github.io/<repo>/`.
+   folder **`/docs`**, Save. The site appears at
+   `https://<user>.github.io/<repo>/`. (The static client lives in `docs/`
+   because Pages only offers `(root)` or `/docs` as the site source.)
 3. Open that site once with the backend appended:
    `https://<user>.github.io/<repo>/?server=https://your-app.onrender.com`
 
