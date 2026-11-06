@@ -35,10 +35,16 @@ const store = {
   set name(v) { localStorage.setItem('wc.name', v); },
   get room() { return localStorage.getItem('wc.room') || ''; },
   set room(v) { localStorage.setItem('wc.room', v); },
+  get server() { return localStorage.getItem('wc.server') || ''; },
+  set server(v) {
+    if (v) localStorage.setItem('wc.server', v);
+    else localStorage.removeItem('wc.server');
+  },
 };
 
 const state = {
   socket: null,
+  server: '',
   me: '',
   room: '',
   users: [],
@@ -85,9 +91,48 @@ const dayLabel = (ts) => {
 // Connection
 // ---------------------------------------------------------------------------
 
+// A client hosted on GitHub Pages has no backend of its own, so ?server= lets
+// it point at a separately hosted one. The resolved host is shown in the header
+// so a crafted link cannot quietly redirect someone's messages.
+function resolveServer(raw) {
+  let url;
+  try {
+    url = new URL(raw);
+  } catch {
+    return '';
+  }
+  if (!['http:', 'https:', 'ws:', 'wss:'].includes(url.protocol)) return '';
+  url.protocol = url.protocol === 'https:' || url.protocol === 'wss:' ? 'wss:' : 'ws:';
+  url.pathname = '/ws';
+  url.search = '';
+  url.hash = '';
+  return url.toString();
+}
+
 function wsUrl() {
+  if (state.server) return state.server;
   const scheme = location.protocol === 'https:' ? 'wss' : 'ws';
   return `${scheme}://${location.host}/ws`;
+}
+
+function backendLabel() {
+  return state.server ? ` · via ${new URL(state.server).host}` : '';
+}
+
+function readServerOverride() {
+  const fromQuery = new URLSearchParams(location.search).get('server');
+  if (fromQuery === null) return store.server;
+  if (fromQuery === '') {
+    store.server = '';
+    return '';
+  }
+  const resolved = resolveServer(fromQuery);
+  if (!resolved) {
+    notify('Ignored ?server= — pass a full http(s):// or ws(s):// URL.');
+    return store.server;
+  }
+  store.server = resolved;
+  return resolved;
 }
 
 function setStatus(kind, text) {
@@ -103,6 +148,7 @@ function connect() {
   }
 
   setStatus('warn', 'connecting');
+  ui.roomSub.textContent = `connecting to ${new URL(wsUrl()).host}`;
   ui.input.disabled = true;
   ui.send.disabled = true;
 
@@ -146,6 +192,7 @@ function scheduleReconnect() {
   const delay = Math.min(1000 * 2 ** state.attempts, 15000);
   state.attempts += 1;
   setStatus('off', `reconnecting in ${Math.round(delay / 1000)}s`);
+  ui.roomSub.textContent = `cannot reach ${new URL(wsUrl()).host}`;
   state.reconnectTimer = setTimeout(connect, delay);
 }
 
@@ -355,7 +402,7 @@ function renderUsers() {
     li.append(dot, label);
     ui.users.append(li);
   }
-  ui.roomSub.textContent = `${state.users.length} online in #${state.room}`;
+  ui.roomSub.textContent = `${state.users.length} online in #${state.room}${backendLabel()}`;
 }
 
 function renderRoster(roster) {
@@ -496,6 +543,8 @@ window.addEventListener('beforeunload', () => {
 // ---------------------------------------------------------------------------
 // Boot
 // ---------------------------------------------------------------------------
+
+state.server = readServerOverride();
 
 if (store.name) {
   connect();

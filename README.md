@@ -116,6 +116,26 @@ location / {
 The 75s read timeout must exceed the server's 30s heartbeat ping, otherwise
 idle connections are dropped by the proxy.
 
+## Splitting client and server (GitHub Pages + a hosted backend)
+
+GitHub Pages serves static files only — it cannot run `server.js`, so a Pages
+deployment alone gives you a chat room that never connects. The client can
+still live on Pages while the server runs elsewhere.
+
+1. Deploy the backend on any of the hosts above and note its URL.
+2. Repo **Settings → Pages → Source: Deploy from a branch**, branch `main`,
+   folder **`/public`**, Save. The site appears at
+   `https://<user>.github.io/<repo>/`.
+3. Open that site once with the backend appended:
+   `https://<user>.github.io/<repo>/?server=https://your-app.onrender.com`
+
+The value is validated (only `http(s)`/`ws(s)` URLs accepted), stored in
+`localStorage`, and shown in the header as `· via <host>` so you can always see
+where your messages are going. Because Pages is served over HTTPS the socket
+upgrades to `wss://` automatically — a plain `http://` backend will not connect.
+
+To go back to same-origin, load `?server=` with nothing after the equals sign.
+
 ## Push it to GitHub
 
 ```bash
