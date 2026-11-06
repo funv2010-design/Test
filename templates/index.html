@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ephemeral Share</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="wrap">
+    <div class="brand">
+      <span class="dot"></span>
+      <span>Ephemeral Share</span>
+    </div>
+
+    <div class="card">
+      <h1>Tạo một phiên dữ liệu tạm thời</h1>
+      <p class="lead">
+        Dữ liệu bạn nhập chỉ được lưu trong bộ nhớ RAM của server — không ghi
+        xuống ổ đĩa, không có cơ sở dữ liệu lâu dài. Mỗi phiên có một đường
+        link riêng chứa mã bí mật; chỉ ai có link đó mới xem được nội dung.
+        Bấm "Xóa" để xóa vĩnh viễn bất cứ lúc nào.
+      </p>
+      <form action="{{ url_for('create_session') }}" method="post">
+        <button class="btn" type="submit">Tạo phiên mới</button>
+      </form>
+
+      <p class="notice">
+        <strong>Lưu ý:</strong> đây là công cụ demo cho mục đích học tập về
+        truyền/xử lý dữ liệu tạm thời trong bộ nhớ. Toàn bộ dữ liệu sẽ mất
+        khi phiên bị xóa hoặc khi server khởi động lại.
+      </p>
+    </div>
+  </div>
+</body>
+</html>
