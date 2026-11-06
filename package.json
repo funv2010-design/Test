@@ -1,0 +1,26 @@
+{
+  "name": "webchat-room",
+  "version": "1.0.0",
+  "description": "A real-time multi-room chat server with a zero-build browser client. One dependency, no database.",
+  "main": "server.js",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node test/smoke.mjs"
+  },
+  "keywords": [
+    "chat",
+    "websocket",
+    "realtime",
+    "node.js",
+    "ws"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "ws": "^8.18.0"
+  }
+}

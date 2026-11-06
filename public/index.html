@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WebChat</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%236d5efc'/%3E%3Cpath d='M9 12h14M9 17h9' stroke='white' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div id="app" class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-mark"></span>
+      <span class="brand-name">WebChat</span>
+    </div>
+
+    <div class="side-block">
+      <div class="side-head">
+        <h2>Rooms</h2>
+        <button id="new-room" class="ghost" type="button" title="Create a room">+ new</button>
+      </div>
+      <input id="new-room-input" class="new-room-input" type="text" maxlength="32" placeholder="room name, then Enter" autocomplete="off">
+      <ul id="rooms" class="rooms" aria-label="Rooms"></ul>
+    </div>
+
+    <div class="side-block grow">
+      <div class="side-head">
+        <h2>Online</h2>
+        <span id="online-count" class="count">0</span>
+      </div>
+      <ul id="users" class="users" aria-label="People online"></ul>
+    </div>
+
+    <div class="me">
+      <span id="me-avatar" class="avatar" aria-hidden="true">?</span>
+      <span class="me-details">
+        <span id="me-name" class="me-name">connecting…</span>
+        <button id="edit-name" class="link" type="button">change name</button>
+      </span>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="chat-head">
+      <div class="chat-title">
+        <h1 id="room-title">—</h1>
+        <p id="room-sub">not connected</p>
+      </div>
+      <div id="status" class="status status-off" role="status">
+        <span class="dot" aria-hidden="true"></span><span id="status-text">offline</span>
+      </div>
+    </header>
+
+    <div id="scroller" class="scroller">
+      <div id="log" class="log"></div>
+      <div id="typing" class="typing" hidden></div>
+      <button id="jump" class="jump" type="button" hidden>New messages ↓</button>
+    </div>
+
+    <form id="composer" class="composer">
+      <textarea id="input" rows="1" maxlength="1000" placeholder="Message" autocomplete="off" disabled></textarea>
+      <button id="send" class="send" type="submit" disabled>Send</button>
+    </form>
+    <p id="notice" class="notice" hidden></p>
+  </main>
+</div>
+
+<div id="overlay" class="overlay">
+  <form id="join-form" class="card">
+    <h2>Join WebChat</h2>
+    <p class="muted">Pick a display name and a room to start chatting.</p>
+    <label for="join-name">Display name</label>
+    <input id="join-name" type="text" maxlength="24" placeholder="e.g. sam" autocomplete="off" required>
+    <label for="join-room">Room</label>
+    <input id="join-room" type="text" maxlength="32" placeholder="lobby" autocomplete="off">
+    <button class="primary" type="submit">Enter chat</button>
+  </form>
+</div>
+
+<script src="/app.js"></script>
+</body>
+</html>
